@@ -1,0 +1,45 @@
+.nav-icon {
+    width: 3.5rem;
+}
+
+#products {
+    --bs-nav-pills-link-active-bg: var(--bs-success);
+    --bs-nav-link-color: var(--bs-success-text-emphasis);
+}
+
+#products .nav-link:hover:not(.active) {
+    background-color: var(--bs-success-bg-subtle);
+    color: var(--bs-success-text-emphasis);
+}
+
+.img-16-9,
+.img-table {
+    aspect-ratio: 16/9;
+    object-fit: cover;
+}
+
+.img-table {
+    width: 17.5rem;
+    border-radius: 15px;
+}
+
+.table-transparente {
+    --bs-table-bg: transparent;
+}
+
+.order-items-container {
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.quantity-circle {
+    width: 24px;
+    height: 24px;
+    font-size: 0.75rem;
+}
+
+.nav-pills {
+    --bs-nav-pills-link-active-bg: var(--bs-success);
+    --bs-nav-link-color: var(--bs-success);
+    --bs-nav-link-hover-color: #157347;
+}
