@@ -36,7 +36,7 @@ class AdminProductController extends Controller
             "nombre" => "required|string",
             "precio" => "required|numeric",
             "descripcion" => "required|string",
-            "imagen" => "image|mimes:jpeg,png,jpg,gif|max:2048"
+            "imagen" => "image|mimes:jpeg,png,jpg,webp|max:2048"
         ]);
         if ($request->hasFile("imagen")) {
             $path = $request->file("imagen")->store("img", "public");
