@@ -72,7 +72,11 @@ run_exec "$APP_CONTAINER" sh -lc "chmod -R ug+rwX storage bootstrap/cache"
 echo "🗄️ Ejecutando migraciones..."
 run_exec "$APP_CONTAINER" php artisan migrate --force
 
-# 5) Limpiar y reconstruir cachés
+# 5) Enlace público a storage (idempotente)
+echo "🔗 Verificando enlace storage..."
+run_exec "$APP_CONTAINER" sh -lc "if [ -L public/storage ]; then echo '✅ public/storage ya es symlink'; elif [ -d public/storage ]; then backup='public/storage_dir_backup_'\$(date +%Y%m%d_%H%M%S); mv public/storage \"\$backup\"; echo \"⚠️ public/storage era carpeta. Backup: \$backup\"; php artisan storage:link; else php artisan storage:link; fi"
+
+# 6) Limpiar y reconstruir cachés
 echo "⚙️ Limpiando y regenerando cachés..."
 run_exec "$APP_CONTAINER" php artisan optimize:clear
 run_exec "$APP_CONTAINER" php artisan config:cache
