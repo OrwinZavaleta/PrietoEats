@@ -54,12 +54,12 @@
                 PrietoValidation.init(profileForm, {
                     name: [
                         'required',
-                        ['maxLength', 255],
+                        ['max', 255],
                     ],
                     email: [
                         'required',
                         'email',
-                        ['maxLength', 255],
+                        ['max', 255],
                     ],
                 });
             }
@@ -73,16 +73,14 @@
                     ],
                     password: [
                         'required',
-                        ['minLength', 8],
+                        ['min', 8],
                     ],
                     password_confirmation: [
                         'required',
-                        ['minLength', 8],
+                        ['min', 8],
                         'confirmed',
                     ],
                 });
-
-                PrietoValidation.addPasswordStrength('#update_password_password');
             }
 
             // Formulario de eliminar cuenta (modal)
