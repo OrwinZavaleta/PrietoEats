@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,5 +25,8 @@ class AppServiceProvider extends ServiceProvider
         Blade::if("admin", function(){
             return Auth::check() && Auth::user()->isAdmin();
         });
+
+        // Comenta esta linea si usas un entorno de desarrollo local sin HTTPS
+        URL::forceScheme('https');
     }
 }
