@@ -45,11 +45,28 @@ const PrietoValidation = (() => {
     /* ── Obtener / crear el <div> de error bajo el input ── */
     function feedbackOf(input) {
         if (input._fb) return input._fb;
-        const el = document.createElement('div');
-        el.className = 'text-danger small mt-1';
-        el.style.display = 'none';
+
         const anchor = input.closest('.input-group') || input;
-        anchor.parentNode.insertBefore(el, anchor.nextSibling);
+        const parent = anchor.parentNode;
+
+        let el = null;
+        let sibling = anchor.nextElementSibling;
+        while (sibling) {
+            if (sibling.classList && sibling.classList.contains('invalid-feedback')) {
+                el = sibling;
+                break;
+            }
+            if (sibling.classList && !sibling.classList.contains('form-text')) break;
+            sibling = sibling.nextElementSibling;
+        }
+
+        if (!el) {
+            el = document.createElement('div');
+            el.className = 'invalid-feedback';
+            el.style.display = 'none';
+            parent.insertBefore(el, anchor.nextSibling);
+        }
+
         return (input._fb = el);
     }
 
@@ -75,11 +92,13 @@ const PrietoValidation = (() => {
             input.classList.add('is-invalid');
             input.classList.remove('is-valid');
             fb.textContent = error;
+            fb.classList.add('d-block');
             fb.style.display = '';
         } else {
             input.classList.remove('is-invalid');
             if (String(val).trim()) input.classList.add('is-valid');
             else                     input.classList.remove('is-valid');
+            fb.classList.remove('d-block');
             fb.style.display = 'none';
         }
         return !error;

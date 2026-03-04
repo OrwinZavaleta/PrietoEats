@@ -14,33 +14,49 @@
                         <form action="{{ route('admin.products.store') }}" method="post" class="row g-4 needs-validation"
                             novalidate enctype="multipart/form-data">
                             @csrf
+
+                            @if ($errors->any())
+                                <div class="col-12">
+                                    <div class="alert alert-danger mb-2" role="alert">
+                                        {{ $errors->first() }}
+                                    </div>
+                                </div>
+                            @endif
+
                             <div class="col-md-6">
                                 <label for="nombre" class="form-label fw-bold text-muted">Nombre del Producto</label>
-                                <input type="text" class="form-control form-control-lg" id="nombre" name="nombre"
-                                    placeholder="Ej. Paella Valenciana" required>
-                                <div class="invalid-feedback">
-                                    Nombre del producto no valido
-                                </div>
+                                <input type="text" class="form-control form-control-lg @error('nombre') is-invalid @enderror" id="nombre" name="nombre"
+                                    placeholder="Ej. Paella Valenciana" value="{{ old('nombre') }}" required>
+                                @error('nombre')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @else
+                                    <div class="invalid-feedback">Nombre del producto no válido.</div>
+                                @enderror
                             </div>
                             <div class="col-md-6">
                                 <label for="precio" class="form-label fw-bold text-muted">Precio (€)</label>
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text bg-light text-success fw-bold">€</span>
-                                    <input type="number" class="form-control" min="0.01" step="0.01" id="precio"
-                                        name="precio" placeholder="0.00" required>
+                                    <input type="number" class="form-control @error('precio') is-invalid @enderror" min="0.01" step="0.01" id="precio"
+                                        name="precio" placeholder="0.00" value="{{ old('precio') }}" required>
                                 </div>
-                                <div class="invalid-feedback">
-                                    Precio del producto no valido
-                                </div>
+                                @error('precio')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @else
+                                    <div class="invalid-feedback">Precio del producto no válido.</div>
+                                @enderror
                             </div>
                             <div class="col-12">
                                 <label for="descripcion" class="form-label fw-bold text-muted">Descripción</label>
-                                <textarea class="form-control" id="descripcion" name="descripcion" rows="4"
-                                    placeholder="Describe los ingredientes y detalles del plato..."></textarea>
+                                <textarea class="form-control @error('descripcion') is-invalid @enderror" id="descripcion" name="descripcion" rows="4"
+                                    placeholder="Describe los ingredientes y detalles del plato...">{{ old('descripcion') }}</textarea>
+                                @error('descripcion')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-12">
                                 <label for="imagen" class="form-label fw-bold text-muted">Imagen del Producto</label>
-                                <input type="file" class="form-control form-control-lg mb-3" id="imagen" name="imagen"
+                                <input type="file" class="form-control form-control-lg mb-3 @error('imagen') is-invalid @enderror" id="imagen" name="imagen"
                                     accept="image/png, image/jpeg, image/webp">
                                 
                                 <div class="text-center d-none" id="imagePreviewContainer">
@@ -49,9 +65,11 @@
                                 </div>
 
                                 <div class="form-text">Formatos aceptados: PNG, JPG, WebP.</div>
-                                <div class="invalid-feedback">
-                                    Por favor, seleccione un formato de imagen válido.
-                                </div>
+                                @error('imagen')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @else
+                                    <div class="invalid-feedback">Por favor, seleccione un formato de imagen válido.</div>
+                                @enderror
                             </div>
                             <div class="col-12 pt-3 text-end">
                                 <a href="{{ route('admin.products.index') }}" class="btn btn-outline-secondary btn-lg me-2 rounded-pill">Cancelar</a>
