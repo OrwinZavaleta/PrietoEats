@@ -43,3 +43,57 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+    <script src="/js/form-validation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Formulario de información personal
+            const profileForm = document.querySelector('form[action="{{ route('profile.update') }}"]');
+            if (profileForm) {
+                PrietoValidation.init(profileForm, {
+                    name: [
+                        'required',
+                        ['maxLength', 255],
+                    ],
+                    email: [
+                        'required',
+                        'email',
+                        ['maxLength', 255],
+                    ],
+                });
+            }
+
+            // Formulario de actualizar contraseña
+            const pwForm = document.querySelector('form[action="{{ route('password.update') }}"]');
+            if (pwForm) {
+                PrietoValidation.init(pwForm, {
+                    current_password: [
+                        'required',
+                    ],
+                    password: [
+                        'required',
+                        ['minLength', 8],
+                    ],
+                    password_confirmation: [
+                        'required',
+                        ['minLength', 8],
+                        'confirmed',
+                    ],
+                });
+
+                PrietoValidation.addPasswordStrength('#update_password_password');
+            }
+
+            // Formulario de eliminar cuenta (modal)
+            const deleteForm = document.querySelector('form[action="{{ route('profile.destroy') }}"]');
+            if (deleteForm) {
+                PrietoValidation.init(deleteForm, {
+                    password: [
+                        'required',
+                    ],
+                });
+            }
+        });
+    </script>
+@endpush

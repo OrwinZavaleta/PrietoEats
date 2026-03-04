@@ -54,19 +54,17 @@
 @endsection
 
 @push('scripts')
+    <script src="/js/form-validation.js"></script>
     <script>
-        (() => {
-            'use strict'
-            const forms = document.querySelectorAll('.needs-validation')
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        })()
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('form[action="{{ route('password.email') }}"]');
+
+            PrietoValidation.init(form, {
+                email: [
+                    'required',
+                    'email',
+                ],
+            });
+        });
     </script>
 @endpush

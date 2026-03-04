@@ -67,19 +67,31 @@
     </div>
 @endsection
 @push('scripts')
+    <script src="/js/form-validation.js"></script>
     <script>
         (() => {
             'use strict'
-            const forms = document.querySelectorAll('.needs-validation')
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-                    form.classList.add('was-validated')
-                }, false)
-            })
+
+            const form = document.querySelector('form[action="{{ route('admin.products.store') }}"]');
+
+            PrietoValidation.init(form, {
+                nombre: [
+                    'required',
+                    ['max', 255],
+                ],
+                precio: [
+                    'required',
+                    'numeric',
+                    ['minVal', 0.01],
+                ],
+                descripcion: [
+                    'required',
+                ],
+                imagen: [
+                    ['fileTypes', ['jpeg', 'jpg', 'png', 'gif', 'webp']],
+                    ['fileMax', 2048],
+                ],
+            });
 
             // Image Preview Logic
             const imgInput = document.getElementById('imagen');

@@ -42,3 +42,18 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="/js/form-validation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('form[action="{{ route('password.confirm') }}"]');
+
+            PrietoValidation.init(form, {
+                password: [
+                    'required',
+                ],
+            });
+        });
+    </script>
+@endpush

@@ -90,6 +90,7 @@
     @endif
 @endsection
 @push('scripts')
+    <script src="/js/form-validation.js"></script>
     <script>
         (() => {
             'use strict'
@@ -109,16 +110,42 @@
                 timeEnd.addEventListener('change', updateTimeInput);
             }
 
-            // Validation Logic
-            form.addEventListener('submit', event => {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                }
-                updateTimeInput(); // Ensure value is updated on submit
-                form.classList.add('was-validated')
-            }, false)
+            // Obtener la fecha de hoy en formato YYYY-MM-DD
+            const today = new Date().toISOString().split('T')[0];
 
+            // Validación reactiva
+            PrietoValidation.init(form, {
+                date_delivery: [
+                    'required',
+                    'date',
+                    ['dateMin', today],
+                ],
+                'platosSeleccionados[]': [
+                    { name: 'custom', param: (_v, f) => {
+                        const checked = f.querySelectorAll('input[name="platosSeleccionados[]"]:checked');
+                        return checked.length > 0 ? '' : 'Selecciona al menos un producto.';
+                    }},
+                ],
+            });
+
+            // También validar checkbox change para feedback inmediato
+            const checkboxes = form.querySelectorAll('input[name="platosSeleccionados[]"]');
+            const firstCb = checkboxes[0];
+            if (firstCb) {
+                checkboxes.forEach(cb => {
+                    cb.addEventListener('change', () => {
+                        PrietoValidation.check(firstCb, [
+                            { name: 'custom', param: (_v, f) => {
+                                const checked = f.querySelectorAll('input[name="platosSeleccionados[]"]:checked');
+                                return checked.length > 0 ? '' : 'Selecciona al menos un producto.';
+                            }},
+                        ], form);
+                    });
+                });
+            }
+
+            // Submit: asegurar time actualizado
+            form.addEventListener('submit', () => { updateTimeInput(); }, true);
 
             // Search Logic
             const searchInput = document.getElementById('offerSearch');

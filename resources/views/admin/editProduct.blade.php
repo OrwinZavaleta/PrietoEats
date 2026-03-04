@@ -74,24 +74,35 @@
     </div>
 @endsection
 @push('scripts')
+    <script src="/js/form-validation.js"></script>
     <script>
         (() => {
             'use strict'
-            const forms = document.querySelectorAll('.needs-validation')
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-                    form.classList.add('was-validated')
-                }, false)
-            })
+
+            const form = document.querySelector('form[action="{{ route('admin.products.update', $plato->id) }}"]');
+
+            PrietoValidation.init(form, {
+                nombre: [
+                    'required',
+                    ['max', 255],
+                ],
+                precio: [
+                    'required',
+                    'numeric',
+                    ['minVal', 0.01],
+                ],
+                descripcion: [
+                    'required',
+                ],
+                imagen: [
+                    ['fileTypes', ['jpeg', 'jpg', 'png', 'gif', 'webp']],
+                    ['fileMax', 2048],
+                ],
+            });
 
             // Image Preview Logic (Update existing img)
             const imgInput = document.getElementById('imagen');
             const previewImg = document.getElementById('imagePreview');
-            // Store original src to revert if needed (optional, keeping it simple)
 
             if(imgInput && previewImg) {
                 imgInput.addEventListener('change', function(e) {
@@ -103,8 +114,6 @@
                         }
                         reader.readAsDataURL(file);
                     }
-                    // If file input is cleared (user cancels), browser usually clears the input.
-                    // We could revert to original src if we stored it, but standard file input behavior varies.
                 });
             }
         })()
