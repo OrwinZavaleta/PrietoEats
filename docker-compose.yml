@@ -17,8 +17,8 @@ services:
       -c autovacuum=off
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
-    networks:
-      - apps-net
+#    networks:
+#      - apps-net
 
   # --- APLICACIÓN: LARAVEL 12 (PHP 8.4 + FrankenPHP) ---
   app:
@@ -39,10 +39,8 @@ services:
       - PGID=1000
 
       # --- Configuración Proxy y Let's Encrypt  ---
-      - VIRTUAL_HOST=prietoeats.orwin.servidorgp.somosdelprieto.com
+      - VIRTUAL_HOST=prietoeats-orwin.${HOSTNAME}
       - VIRTUAL_PORT=8080
-      - LETSENCRYPT_HOST=prietoeats.orwin.servidorgp.somosdelprieto.com
-      - LETSENCRYPT_EMAIL=orwinzavaleta@gmail.com
 
       # --- Laravel Core ---
       - APP_NAME=PrietoEats
@@ -78,8 +76,9 @@ services:
       - HTTPS=on 
       - TRUSTED_PROXIES=*
 
-networks:
-  proxy-net:
-    external: true
-  apps-net:
-    external: true
+#networks:
+#  proxy-net:
+#    external: true
+#  apps-net:
+#    external: true
+
